@@ -23,16 +23,17 @@ DROP TABLE IF EXISTS `clubs`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `clubs` (
-  `clib_id` int(11) NOT NULL AUTO_INCREMENT,
-  `club_name` varchar(60) NOT NULL,
-  `faculty_id` int(11) DEFAULT NULL,
-  `student_id` int(11) DEFAULT NULL,
-  PRIMARY KEY (`clib_id`),
-  KEY `faculty_id` (`faculty_id`),
-  KEY `student_id` (`student_id`),
-  CONSTRAINT `clubs_ibfk_1` FOREIGN KEY (`faculty_id`) REFERENCES `login_details` (`user_id`),
-  CONSTRAINT `clubs_ibfk_2` FOREIGN KEY (`student_id`) REFERENCES `login_details` (`user_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  `club_id` int(11) NOT NULL AUTO_INCREMENT,
+  `club_name` varchar(200) DEFAULT NULL,
+  `faculty_id` varchar(50) DEFAULT NULL,
+  `student_id` varchar(50) DEFAULT NULL,
+  PRIMARY KEY (`club_id`),
+  KEY `fk_club_student` (`student_id`),
+  KEY `fk_club_faculty` (`faculty_id`),
+  CONSTRAINT `fk_club_faculty` FOREIGN KEY (`faculty_id`) REFERENCES `login_details` (`user_id`),
+  CONSTRAINT `fk_club_student` FOREIGN KEY (`student_id`) REFERENCES `login_details` (`user_id`),
+  CONSTRAINT `fk_clud_student` FOREIGN KEY (`student_id`) REFERENCES `login_details` (`user_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -41,6 +42,7 @@ CREATE TABLE `clubs` (
 
 LOCK TABLES `clubs` WRITE;
 /*!40000 ALTER TABLE `clubs` DISABLE KEYS */;
+INSERT INTO `clubs` VALUES (1,'Dramatics','123456','14MSE1108'),(2,'LUG','789123','14MSE1103');
 /*!40000 ALTER TABLE `clubs` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -52,8 +54,8 @@ DROP TABLE IF EXISTS `login_details`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `login_details` (
-  `user_id` int(11) NOT NULL,
-  `password` varchar(200) NOT NULL,
+  `user_id` varchar(50) NOT NULL,
+  `pass` varchar(200) DEFAULT NULL,
   `type` varchar(45) DEFAULT NULL,
   PRIMARY KEY (`user_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -65,6 +67,7 @@ CREATE TABLE `login_details` (
 
 LOCK TABLES `login_details` WRITE;
 /*!40000 ALTER TABLE `login_details` DISABLE KEYS */;
+INSERT INTO `login_details` VALUES ('123456','testing','faculty'),('14MSE1103','testing','student'),('14MSE1108','testing','student'),('56060','testing','swc'),('789123','testing','faculty');
 /*!40000 ALTER TABLE `login_details` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -76,18 +79,17 @@ DROP TABLE IF EXISTS `requests`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `requests` (
-  `request_id` int(11) NOT NULL AUTO_INCREMENT,
-  `title` varchar(100) DEFAULT NULL,
-  `request_from` int(11) DEFAULT NULL,
+  `req_id` int(11) NOT NULL AUTO_INCREMENT,
+  `title` varchar(200) DEFAULT NULL,
+  `req_from` varchar(50) DEFAULT NULL,
   `venue` varchar(45) DEFAULT NULL,
-  `date` date DEFAULT NULL,
+  `event_date` date DEFAULT NULL,
   `from_time` time DEFAULT NULL,
   `to_time` time DEFAULT NULL,
-  `staus` varchar(45) DEFAULT NULL,
-  PRIMARY KEY (`request_id`),
-  KEY `request_from` (`request_from`),
-  CONSTRAINT `requests_ibfk_1` FOREIGN KEY (`request_from`) REFERENCES `login_details` (`user_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  PRIMARY KEY (`req_id`),
+  KEY `fk_user_request` (`req_from`),
+  CONSTRAINT `fk_user_request` FOREIGN KEY (`req_from`) REFERENCES `login_details` (`user_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -96,6 +98,7 @@ CREATE TABLE `requests` (
 
 LOCK TABLES `requests` WRITE;
 /*!40000 ALTER TABLE `requests` DISABLE KEYS */;
+INSERT INTO `requests` VALUES (1,'Drama curtain raiser','14MSE1108','MBA Amphi','2017-08-20','18:00:00','20:00:00'),(2,'Spoken tutorial','14MSE1103','503 AB1','2017-08-21','14:00:00','18:00:00');
 /*!40000 ALTER TABLE `requests` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -116,4 +119,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2017-08-09 23:07:47
+-- Dump completed on 2017-08-24 12:36:32
